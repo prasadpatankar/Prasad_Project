@@ -56,6 +56,8 @@ app.layout = html.Div(children=[
     html.A('Code on Github', href=githublink),
     html.Br(),
     html.A('Data Source', href=sourceurl),
+    html.Br(),
+    html.A('Prepared by DEPA')
     ]
 )
 
