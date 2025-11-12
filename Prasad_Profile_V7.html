@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prasad Patankar | Analytical Leadership</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom CSS for modern aesthetic and animations */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        /* --- Base Styling: Dark, Multicolor Theme --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212; /* Rich Dark Gray Background */
+            color: #E0E0E0; /* Light Grey Text */
+            overflow-x: hidden;
+        }
+
+        /* Override Tailwind colors for new scheme */
+        /* Primary Accent (Green/Cyan) - remains the main highlight */
+        .text-accent, .border-accent, .hover\:text-accent:hover {
+            color: #00FFBB;
+            border-color: #00FFBB;
+        }
+        .selection\:bg-\[\#00FFBB\]::selection {
+            background-color: #00FFBB;
+            color: #000000;
+        }
+        
+        /* Secondary Accent (Blue) - used for backgrounds, shadows, and secondary highlights */
+        .secondary-accent-bg {
+            background-color: #00BFFF20; /* Light Blue with transparency */
+        }
+        .secondary-accent-text {
+            color: #00BFFF; /* Deep Sky Blue */
+        }
+        
+        /* Dark Mode Colors */
+        .bg-dark-primary { background-color: #121212; }
+        .bg-dark-secondary { background-color: #1F1F1F; }
+        
+        /* Utility for subtle fade-in animation (unchanged) */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Interactive Cards: New Hover Effect with Blue & Green --- */
+        .expertise-card {
+            color: #00BFFF; /* Deep Sky Blue (Secondary Accent) */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #00FFBB20; /* Lighter initial border */
+        }
+
+
+        .expertise-card:hover {
+            transform: translateY(-5px);
+            /* Use a combined shadow for the multicolor effect */
+            box-shadow: 0 4px 15px rgba(0, 255, 187, 0.2), 0 10px 30px rgba(0, 191, 255, 0.15); 
+            background-color: #2a2a2a; /* Slightly darker on hover */
+            border-color: #00FFBB40; /* Slightly stronger border on hover */
+        }
+
+        /* Custom scrollbar (unchanged, still uses accent green) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #00ffbb66; /* slightly more opaque */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+
+        /* Style for the fixed scroll-guided content box (Removed as the section isn't fully implemented in the provided HTML) */
+
+        /* --- Project Accordion Styling: Multicolor Contrast --- */
+        .project-division {
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            background-color: #1F1F1F; /* Secondary dark color */
+            border: 1px solid #00BFFF30; /* Secondary accent border */
+            border-left: 5px solid #00FFBB; /* Strong primary accent bar on the left */
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+        }
+        .project-division-header {
+            font-size: 2rem; /* text-3xl */
+            font-weight: 800; /* font-extrabold */
+            
+            color: #00BFFF; /* Use Secondary Accent Blue for Division Header */
+            border-bottom: 2px solid #00FFBB60; /* Primary Accent underline */
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+
+        /* Add/Replace this rule in the <style> block */
+        /* Override for H4 sub-headings inside the project divisions to Bright Gold */
+        .project-division h4 {
+            color: #FFD700 !important; /* Bright Gold */
+            font-weight: 700; 
+            /* Use a light gold border for a subtle underline */
+            border-bottom-color: #FFD70040 !important; 
+        }
+        .project-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            cursor: pointer;
+            border-bottom: 1px solid #333333;
+            transition: background-color 0.2s ease;
+        }
+        .project-item-header:hover {
+            background-color: #262626;
+            padding-left: 0.5rem; /* Subtle hover shift */
+        }
+        .project-item-header:last-of-type {
+            border-bottom: none;
+        }
+        .project-title {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* font-semibold */
+            /*color: #E0E0E0;*/
+            color: #00FFBB; /* Chevron uses Primary Accent */
+            padding-left: 0.5rem; 
+        }
+        .project-details {
+            padding: 1rem 0 1.5rem 0;
+            font-size: 0.95rem; /* Slightly larger text-sm */
+            color: #B0B0B0; /* Slightly lighter gray for better readability */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            border-left: 2px solid #00BFFF; /* Blue indicator for open details */
+            padding-left: 1.5rem;
+        }
+        .project-details.active {
+            max-height: 800px; 
+            padding-top: 1rem;
+            padding-bottom: 1.5rem;
+        }
+        .lucide-chevron-down {
+            transition: transform 0.3s ease, color 0.3s ease;
+            color: #00FFBB; /* Chevron uses Primary Accent */
+        }
+        .expanded .lucide-chevron-down {
+            transform: rotate(180deg);
+            color: #00BFFF; /* Chevron changes to Secondary Accent when expanded */
+        }
+        
+        /* Specific styles for data table inside project details */
+        .project-details table {
+            border: 1px solid #444;
+        }
+        .project-details th {
+            background-color: #00BFFF10 !important; /* Secondary accent light background */
+            color: #00BFFF;
+            font-weight: 700;
+            border: 1px solid #333;
+        }
+        .project-details td {
+            border: 1px solid #ddd;
+        }
+        .project-details tr:nth-child(even) {
+            background-color: #242424; /* Zebra striping */
+        }
+
+        /* Education and Certification Cards */
+        .bg-dark-secondary p {
+            color: #E0E0E0;
+        }
+        .bg-dark-secondary p.text-sm {
+            color: #A0A0A0;
+        }
+
+
+        /* Accolade image styling (unchanged) */
+        .accolade-img-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem; 
+            box-shadow: 0 4px 15px rgba(0, 255, 187, 0.1);
+        }
+        .accolade-img {
+            width: 100%;
+            height: 100%; 
+            object-fit: contain; 
+            display: block;
+            transition: transform 0.5s ease-in-out;
+            border-radius: 0.75rem; 
+        }
+        .accolade-img:hover {
+            transform: scale(1.03); 
+        }
+        #slides-wtm > div {
+            height: 100%; 
+        }
+        .accolade-img-container {
+            box-shadow: 0 4px 20px rgba(0, 191, 255, 0.3); /* Blue shadow for a change */
+        }
+        /* NEW: Quote container styles */
+        .quote-slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 3rem;
+            background-color: #1F1F1F; /* secondary dark background */
+            color: #E0E0E0;
+            border-radius: 0.75rem;
+            height: 100%;
+        }
+        .quote-text {
+            font-size: 1.5rem;
+            font-style: italic;
+            font-weight: 500;
+            color: #00FFBB; /* Primary Accent */
+            line-height: 1.8;
+            position: relative;
+        }
+        .quote-author {
+            display: block;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #00BFFF; /* Secondary Accent */
+        }
+
+
+        /* NEW: Utility to evenly distribute 5 items in a grid */
+        .grid-cols-5-auto {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+        /* --- NEW CAROUSEL STYLES --- */
+        #slides-visualisation > div {
+            height: 100%;
+        }
+        .visualisation-img-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem; 
+            box-shadow: 0 4px 20px rgba(0, 255, 187, 0.3); /* Green shadow for visualisations */
+        }
+
+
+    </style>
+
+</head>
+
+<body class="selection:bg-[#00FFBB] selection:text-black">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'accent': '#00FFBB', /* Neon Green/Cyan (Primary) */
+                        'secondary-accent': '#00BFFF', /* Deep Sky Blue (Secondary) */
+                        'dark-primary': '#121212',
+                        'dark-secondary': '#1F1F1F',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <header class="sticky top-0 z-50 bg-dark-primary/90 backdrop-blur-sm p-4 border-b border-dark-secondary">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-extrabold text-accent tracking-tighter">PRASAD PATANKAR</h1>
+            <nav class="space-x-6 text-sm font-medium hidden sm:block">
+                <a href="#summary" class="text-gray-400 hover:text-accent transition duration-200">Summary</a>
+                <a href="#expertise" class="text-gray-400 hover:text-accent transition duration-200">Expertise</a>
+                <a href="#skills" class="text-gray-400 hover:text-accent transition duration-200">Skills &amp; Edu</a>
+                <a href="#Research Projects" class="text-gray-400 hover:text-accent transition duration-200">Research Projects</a>
+                <a href="#Applications" class="text-gray-400 hover:text-accent transition duration-200">Applications</a>
+                <a href="#accolades" class="text-gray-400 hover:text-accent transition duration-200">Accolades</a>
+                <a href="#contact" class="text-gray-400 hover:text-accent transition duration-200">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero" class="relative overflow-hidden pt-16 md:pt-32 pb-16 border-b border-dark-secondary">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div class="lg:col-span-8">
+                <p class="text-xl text-gray-400 mb-4 fade-in">14+ Years of Analytical Leadership</p>
+                <h2 class="text-7xl md:text-8xl lg:text-[9rem] font-extrabold leading-none mb-6 text-white tracking-tighter fade-in" style="transition-delay: 0.2s;">
+                    PRASAD<br>
+                    <span class="text-accent">PATANKAR</span>
+                </h2>
+                <h3 class="text-2xl md:text-3xl font-medium text-gray-300 max-w-2xl fade-in" style="transition-delay: 0.4s;">
+                    Assistant General Manager,<br> Department of Economic &amp; Policy Analysis
+                </h3>
+            </div>
+
+            <div class="lg:col-span-4 flex flex-col justify-center lg:justify-start fade-in" style="transition-delay: 0.8s;">
+                <div class="w-full lg:w-80 p-6 bg-dark-secondary rounded-xl border border-accent/20 shadow-2xl shadow-secondary-accent/20">                    <p class="text-sm font-semibold mb-2 text-accent">CONTACT &amp; LOCATION</p>
+                    <div class="space-y-2 text-gray-300">
+                        <p class="flex items-center"><i data-lucide="map-pin" class="w-4 h-4 mr-2 text-gray-500"></i> Mumbai, Maharashtra, India</p>
+                        <p class="flex items-center"><i data-lucide="mail" class="w-4 h-4 mr-2 text-gray-500"></i> <a href="mailto:prasadp@sebi.gov.in" class="hover:text-accent">prasadp@sebi.gov.in</a></p>
+                        <p class="flex items-center"><i data-lucide="phone" class="w-4 h-4 mr-2 text-gray-500"></i> +91 98330 94490</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="summary" class="py-16 border-b border-dark-secondary">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-3xl font-bold mb-6 text-white fade-in">Professional Summary</h2>
+            <p class="text-lg text-gray-400 leading-relaxed max-w-5xl fade-in" style="transition-delay: 0.2s;">
+                Accomplished economist and capital markets specialist with <b>over 14 years of progressive experience</b> in economic research, policy analysis, securities regulation, and financial risk management. Demonstrated leadership in steering impactful research for regulatory reform, enhancing investor education, and developing data-driven applications. Adept at automation of routine reports, database management, <b>big data analytical projects</b>, anomaly detection, quantitative modeling, and developing dashboards and web-based applications for easy access of data/insights for users.
+            </p>
+        </div>
+    </section>
+
+    <section id="skills" class="py-24 bg-dark-primary border-t border-b border-accent/20">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-16 text-center text-white fade-in">Technical Stack, Education &amp; Credentials</h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                
+                <div class="fade-in">
+                    <h3 class="text-2xl font-semibold mb-4 text-accent border-b border-accent/30 pb-2 flex items-center"><i data-lucide="code" class="w-5 h-5 mr-2"></i> Core Skills &amp; Technology</h3>
+                    <ul class="space-y-2 text-lg text-gray-300">
+                        <li><span class="font-bold text-white">Big Data Analytics &amp; ML:</span> Anomaly Detection, Quantitative Modeling, AI/ML</li>
+                        <li><span class="font-bold text-white">Programming:</span> Python, R, SQL, HTML, Javascript, Excel Macro</li>
+                        <li><span class="font-bold text-white">Financial Expertise:</span> Regulation, Risk Management, Economic Research</li>
+                        <li><span class="font-bold text-white">Data Systems:</span> Bloomberg, Refinitiv, Data Visualization &amp; Dashboards</li>
+                    </ul>
+                </div>
+
+                <div class="fade-in" style="transition-delay: 0.1s;">
+                    <h3 class="text-2xl font-semibold mb-4 text-accent border-b border-accent/30 pb-2 flex items-center"><i data-lucide="graduation-cap" class="w-5 h-5 mr-2"></i> Education</h3>
+                    <div class="space-y-6 text-gray-300">
+                        <div class="bg-dark-secondary p-4 rounded-lg">
+                            <p class="font-bold text-white">Master in Public Policy and Economics</p>
+                            <p class="text-sm">National Graduate Institute for Policy Studies (GRIPS) • Tokyo, Japan (2016-2017)</p>
+                        </div>
+                        <div class="bg-dark-secondary p-4 rounded-lg">
+                            <p class="font-bold text-white">Master in Management Studies (Finance)</p>
+                            <p class="text-sm">University of Mumbai • Mumbai, India (2007-2009)</p>
+                        </div>
+                        <div class="bg-dark-secondary p-4 rounded-lg">
+                            <p class="font-bold text-white">Bachelor of Engineering (Electronics)</p>
+                            <p class="text-sm">University of Mumbai • Mumbai, India (2003-2007)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-in" style="transition-delay: 0.2s;">
+                    <h3 class="text-2xl font-semibold mb-4 text-accent border-b border-accent/30 pb-2 flex items-center"><i data-lucide="award" class="w-5 h-5 mr-2"></i> Certifications</h3>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="bg-dark-secondary p-3 rounded-lg"><span class="font-bold text-white">Financial Risk Manager (FRM)</span> — GARP, USA</li>
+                        <li class="bg-dark-secondary p-3 rounded-lg"><span class="font-bold text-white">Time Series Analysis using Python</span> — IIM, Mumbai</li>
+                        <li class="bg-dark-secondary p-3 rounded-lg"><span class="font-bold text-white">Statistical Analysis using R</span> — IIT, Kharagpur</li>
+                        <li class="bg-dark-secondary p-3 rounded-lg"><span class="font-bold text-white">Econometrics and Research Methods using R</span> — NISM</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="expertise" class="py-24 max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-16 text-center text-white fade-in">Core Analytical Domains</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            <a href="#projects-publication" class="expertise-card p-6 bg-dark-secondary rounded-xl border border-accent/20 fade-in" style="transition-delay: 0.1s;">
+                <i data-lucide="book-open-text" class="w-8 h-8 text-accent mb-4"></i>
+                <h3 class="text-2xl font-semibold mb-3">Publication &amp; Statistics</h3>
+                <p class="text-gray-400 text-sm">Overseeing the preparation and dissemination of official market publications and research articles for SEBI.</p>
+                <ul class="mt-4 text-sm space-y-1 text-gray-500">
+                    <li>- SEBI Monthly Bulletin</li>
+                    <li>- SEBI Annual Report</li>
+                    <li>- SEBI Handbook of Statistics</li>
+                </ul>
+            </a>
+
+            <a href="#projects-policy" class="expertise-card p-6 bg-dark-secondary rounded-xl border border-accent/20 fade-in" style="transition-delay: 0.2s;">
+                <i data-lucide="trending-up" class="w-8 h-8 text-accent mb-4"></i>
+                <h3 class="text-2xl font-semibold mb-3">Policy Analysis &amp; Research</h3>
+                <p class="text-gray-400 text-sm">Conducting high-impact research studies and providing critical analytical support for complex market cases.</p>
+                <ul class="mt-4 text-sm space-y-1 text-gray-500">
+                    <li>- Equity Derivatives P/L Analysis</li>
+                    <li>- Investor Behaviour in IPOs</li>
+                    <li>- Anomaly &amp; Manipulation Pattern Detection</li>
+                </ul>
+            </a>
+
+            <a href="#projects-systemic" class="expertise-card p-6 bg-dark-secondary rounded-xl border border-accent/20 fade-in" style="transition-delay: 0.3s;">
+                <i data-lucide="shield-check" class="w-8 h-8 text-accent mb-4"></i>
+                <h3 class="text-2xl font-semibold mb-3">Systemic Stability &amp; Monitoring</h3>
+                <p class="text-gray-400 text-sm">Developing comprehensive indices and systems to monitor and ensure the stability of the securities market.</p>
+                <ul class="mt-4 text-sm space-y-1 text-gray-500">
+                    <li>- Financial Stability Indices (FSI)</li>
+                    <li>- FSI _ Fixed Income for Backstop Facility</li>
+                    <li>- Early Warning Dashboard</li>
+                </ul>
+            </a>
+
+            <a href="#projects-data" class="expertise-card p-6 bg-dark-secondary rounded-xl border border-accent/20 fade-in" style="transition-delay: 0.4s;">
+                <i data-lucide="database-zap" class="w-8 h-8 text-accent mb-4"></i>
+                <h3 class="text-2xl font-semibold mb-3">Data &amp; Innovation</h3>
+                <p class="text-gray-400 text-sm">Pioneering new data infrastructures and digital initiatives for improved market transparency and access.</p>
+                <ul class="mt-4 text-sm space-y-1 text-gray-500">
+                    <li>- DISM Integrated Database (Python/SQL)</li>
+                    <li>- Talk2Data WebApp (NLP/Gemini AI)</li>
+                    <li>- Interactive Handbook of Statistics (R/SQL)</li>
+                </ul>
+            </a>
+        </div>
+    </section>
+    
+    <section id="applications-overview" class="py-16 max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-16 text-center text-white fade-in">
+            Analytical Projects &amp; Applications Summary
+        </h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5-auto gap-6">
+            
+            <a href="#app-project-1" class="expertise-card p-6 bg-dark-secondary rounded-xl border border-accent/20 fade-in" style="transition-delay: 0.1s;">
+                <i data-lucide="line-chart" class="w-8 h-8 text-accent mb-4"></i>
+                <h3 class="text-lg font-semibold mb-2">Interactive Handbook</h3>
+                <p class="text-gray-400 text-sm">SEBI Handbook of Statistics, custom data-fetching, visualization tool.</p>
+                <p class="mt-4 text-xs font-bold text-secondary-accent">R, SQL, Shinyapps</p>
+            </a>
+            
+            <a href="#app-project-2" class="expertise-card p-6 bg-dark-secondary rounded-xl border border-accent/20 fade-in" style="transition-delay: 0.2s;">
+                <i data-lucide="database" class="w-8 h-8 text-accent mb-4"></i>
+                <h3 class="text-lg font-semibold mb-2">Market Data Dashboard</h3>
+                <p class="text-gray-400 text-sm">Interactive market statistics dashboard for management and data maintenance.</p>
+                <p class="mt-4 text-xs font-bold text-secondary-accent">Python, SQL, Plotly</p>
+            </a>
+
+            <a href="#app-project-3" class="expertise-card p-6 bg-dark-secondary rounded-xl border border-accent/20 fade-in" style="transition-delay: 0.3s;">
+                <i data-lucide="zap" class="w-8 h-8 text-accent mb-4"></i>
+                <h3 class="text-lg font-semibold mb-2">Valid UPI Generation</h3>
+                <p class="text-gray-400 text-sm">Client-side tool to correctly generate UPI Request links for intermediaries.</p>
+                <p class="mt-4 text-xs font-bold text-secondary-accent">HTML, JavaScript</p>
+            </a>
+
+            <a href="#app-project-4" class="expertise-card p-6 bg-dark-secondary rounded-xl border border-accent/20 fade-in" style="transition-delay: 0.4s;">
+                <i data-lucide="shield-ellipsis" class="w-8 h-8 text-accent mb-4"></i>
+                <h3 class="text-lg font-semibold mb-2">Valid UPI Verification</h3>
+                <p class="text-gray-400 text-sm">Bank portal for viewing, approving, or rejecting UPI validation requests.</p>
+                <p class="mt-4 text-xs font-bold text-secondary-accent">HTML, JavaScript</p>
+            </a>
+
+            <a href="#app-project-5" class="expertise-card p-6 bg-dark-secondary rounded-xl border border-accent/20 fade-in" style="transition-delay: 0.5s;">
+                <i data-lucide="brain" class="w-8 h-8 text-accent mb-4"></i>
+                <h3 class="text-lg font-semibold mb-2">Talk2Data WebApp</h3>
+                <p class="text-gray-400 text-sm">NLP-based custom query on SEBI orders database using Gemini AI.</p>
+                <p class="mt-4 text-xs font-bold text-secondary-accent">Python, SQL, Gemini AI</p>
+            </a>
+        </div>
+    </section>
+    <section id="Research Projects" class="py-24 max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-16 text-center text-white fade-in">
+            High-Impact Research Projects
+        </h2>
+
+        <div id="projects-container" class="fade-in" style="transition-delay: 0.1s;">
+            
+            <div id="projects-publication" class="project-division">
+                <h3 class="project-division-header flex items-center"><i data-lucide="book-open-text" class="w-7 h-7 mr-3"></i> Publication &amp; Statistics Division</h3>
+                
+                <div class="project-item">
+                    <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                        <span class="project-title"><b>●&nbsp;&nbsp;&nbsp;&nbsp;Prepare SEBI Publications</b></span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                    </div>
+                    <div class="project-details">
+                        <p>--&gt; Involved in the preparation of key SEBI publications: <b>SEBI Monthly bulletin</b>, <b>SEBI Annual Report</b>, and <b>SEBI Handbook of Statistics</b>.</p>
+                    </div>
+                </div>
+                
+                <div class="project-item">
+                    <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                         <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Maintain databases and statistics</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                    </div>
+                    <div class="project-details">
+                        <p>--&gt; Responsible for the ongoing maintenance of official databases and statistics (DWBIS Database for Research) </p>
+                        <p>--&gt; Development of Interactive Handbook of Statistics using R and SQL. <br> (The prototype can be accessed at the following link- https://prasadp.shinyapps.io/sebi/ )</p>
+                    </div>
+                </div>
+                
+                <div class="project-item">
+                    <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                         <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Write Research Articles / Short Notes / Speeches</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                    </div>
+                    <div class="project-details">
+                        <p>--&gt; Information notes on the contemporary topics / major developments</p>
+                        <p>--&gt; Inputs for FSB, FSR, management Speeches, etc.</p>
+                        <p>--&gt; Contributed to research articles featured in the SEBI bulletin.</p>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div id="projects-policy" class="project-division">
+                <h3 class="project-division-header flex items-center"><i data-lucide="trending-up" class="w-7 h-7 mr-3"></i> Policy Analysis &amp; Research</h3>
+                
+                <div class="mt-4 mb-4">
+                    <h4 class="text-xl font-semibold mb-2 text-accent/80 border-b border-accent/10 pb-2">Published Research </h4>
+
+
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Analysis of Profits and Losses in the Indian Equity Derivatives Segment</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <div class="project-details">
+                            <p>A research study focused on the profits and losses incurred in the Indian Equity Derivatives Segment.</p>
+                            <p><b>Period:</b> FY22 - FY24 (Three Years)</p>
+                            <p><b>Methodology:</b> SEBI study analyzing P&amp;L patterns for 1.13 crore unique individual F&amp;O traders.</p>
+                            <p><b>Key Findings:</b></p>
+                            <ul style="list-style-type: disc; padding-left: 20px;">
+                                <li><b>High Loss Rate &amp; Aggregate Loss:</b> 93% of individual F&amp;O traders incurred losses, with aggregate losses exceeding ₹1.8 lakh crores (USD 21 billion) over the three years.</li>
+                                <li><b>Persistence:</b> Despite consecutive years of losses, more than 75% of loss-making traders continued trading in F&amp;O.</li>
+                                <li><b>Trading Activity &amp; Loss:</b> Higher trading activity was associated with a higher percentage of loss-makers.</li>
+                                <li><b>Options Dominance &amp; Loss:</b> 99.3% of traders used Options. In FY24, 91.5% of Options traders made losses.</li>
+                                <li><b>Algorithmic Profits:</b> Proprietary Traders and FPIs were net profitable, largely driven by algorithmic trading (96%-97% of their profits).</li>
+                                <li><b>Younger Traders:</b> The proportion of young traders (below 30 years) rose significantly from 31% (FY22) to 43% (FY24).</li>
+                                <li><b>Small Town Participation:</b> Individuals from ‘Small Towns’ (Beyond Top 30 cities) made up over 72% of the total F&amp;O trader base.</li>
+                                <li><b>Low-Income Growth:</b> The proportion of “Low\_Income” traders (annual income less ₹5 lakh) increased from 71% (FY22) to 76% (FY24).</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Investor Behaviour in Initial Public Offerings (IPOs)</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <div class="project-details">
+                            <p><b>Period:</b> April 2021 - December 2023</p>
+                            <p><b>Methodology:</b> SEBI study analyzing 144 Main Board IPOs (92.60 lakh unique investors).</p>
+                            <p><b>Key Findings:</b></p>
+                            <ul style="list-style-type: disc; padding-left: 20px;">
+                                <li><b>Rapid Selling ("Flipping"):</b> Individual investors sold 50% of shares by value within a week of listing.</li>
+                                <li><b>Overall Quick Exit:</b> 54% of all allotted shares (excluding anchor investors) were sold within a week.</li>
+                                <li><b>Disposition Effect:</b> Investors preferred selling shares that showed positive listing gains over those with losses.</li>
+                                <li><b>Returns-Driven Sales:</b> When IPO returns exceeded 20%, nearly 68% of shares were sold in a week.</li>
+                                <li><b>New Investor Surge:</b> Nearly 50% of IPO-applying Demat accounts were opened in the post-COVID period (2021-2023).</li>
+                                <li><b>NII Oversubscription Halved:</b> NII category oversubscription dropped from 38x to 17x after policy changes.</li>
+                                <li><b>Big Ticket NII Drop:</b> Large NII applications (&gt;₹1 Cr) plummeted from ~626 to ~20 per IPO post-policy.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Study on extent of Hedging in the Indian EDS</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+
+                        <div class="project-details">                            
+                            <p>A comprehensive research study focused on the transactional behavior and market structure of both institutional and retail participants in the Indian F&amp;O segment, specifically examining hedging versus speculation activity.</p>                          
+                            <p><b>Period:</b> April 1, 2024 – March 1, 2025</p>
+                            <p><b>Methodology:</b> Analysis of transaction and holding level data for over <b>10 million unique F&amp;O traders</b> to identify structural patterns and trends in positioning.</p>
+                            <p><b>Key Findings:</b></p>
+
+                            <ul>
+                                <li><b>Structural Divergence:</b> Mutual Funds (MFs) consistently maintained a <b>net short</b> position (for hedging/arbitrage) using ~2.5% of their equity portfolio, while individual traders were consistently <b>net long</b> (utilizing 15-20% of their overall equity portfolio).</li>
+                                
+                                <li><b>Minimal Hedging by Individuals:</b> Only approx. <b>2-3%</b> of individuals attempted any form of hedging, with direct, contra-position hedging accounting for a negligible <b>0.02%</b> of their total F&amp;O trading activity.</li>
+                                
+                                <li><b>Dominance of Speculation:</b> The vast majority of retail activity was short-term: <b>68-73%</b> focused on intraday trades, and <b>25-30%</b> took explicit speculative positions.</li>
+                                
+                                <li><b>Equity Disconnect:</b> A significant portion of F&amp;O traders lacked substantial equity holdings: <b>33%</b> had zero underlying equity position, and over <b>90%</b> had total securities account balances below INR 1,000,000.</li>
+                            </ul>
+                            
+                        </div>
+
+
+
+                    </div>
+                     <br>
+                    <br>
+
+                <div class="mt-4 mb-4">
+                    <h4 class="text-xl font-semibold mb-2 text-accent/80 border-b border-accent/10 pb-2">Internal Policy Research (Inputs to Operations)</h4>
+
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp; Impact of M&A announcement on the Stock Prices of Target company</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <div class="project-details">
+                            <p> To find out if there is leakage of information prior to announcement </p>
+                            <p> Used event study methodology to abnormal returns. Findings- The leakage of information happen. 10 days abnormal return were about +2.5% in the target company.  </p>
+                            <p> In the midsize M&A deals, the target company prices run up as much as 8%  </p>
+                        </div>
+                    </div>
+
+
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp; Impact of Changes in TER for MF Schemes  (for B15 cities) on Inflow, AUM and Folios</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <div class="project-details">
+                            <p> There was no significnat change in the inflows from B15 cities </p>
+                            <p> Used DID regression to estimate the impact </p>
+                            <p> Anomalies- Two AMCs had shown pattern of churning of folios from T15 to B15 </p>
+                        </div>
+                    </div>
+
+
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp; Analysis of Related Party Transactions (RPTs)</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <div class="project-details">
+                            <p>Internal research providing inputs to operations, focusing on the analysis of Related Party Transactions (RPTs) in Sales, Purchases, and Loans to understand concentration and data reporting requirements.</p>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Pre-open Call Auction Session / Closing Auction Session Analysis</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <div class="project-details">
+                            <p>Analytical support for the review and analysis of market mechanisms, specifically the <b>Pre-open Call Auction Session</b> and <b>Closing Auction Session</b>.</p>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;White Paper - Overview of IPO Grey Market in India</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <div class="project-details">
+                            <p> Internal research providing inputs to operations, on working, operations and current practises in Greay market in India.</p>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+
+                <div class="mt-4 mb-4">
+                    <h4 class="text-xl font-semibold mb-2 text-accent/80 border-b border-accent/10 pb-2">Analytical Support for Surveillance</h4>
+                    
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Computation of Profits in Case of Jane Street India</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <div class="project-details">
+                            <p>--&gt; Assisted Investigation department in computing profits and losses and preparing a Python script for analysis.</p>
+                            <p>--&gt; Analysis indicated alleged unlawful gains of ₹4,843 crore (approximately $570 million) from analysis of just 21 expiry days..</p>
+
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Early Detection of Pump and Dump Cases</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <div class="project-details">
+                            <p>--&gt; Preparing a predictive model and algorithm for market surveillance on daily basis.</p>
+                            <p>--&gt; Utilized a Long Short-Term Memory (LSTM) network, a type of Recurrent Neural Network (RNN).</p>
+
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                            <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Early Detection of Funds Siphoning Cases</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <div class="project-details">
+                            <p>--&gt; Identified patterns and root causes of siphoning using comprehensive corporate financials and shareholding data, aiming to flag suspicious companies proactively.</p>
+                        </div>
+                    </div>
+
+                    
+                </div>
+
+            </div>
+        </div>
+        </div>
+
+
+        <div id="projects-systemic" class="project-division">
+            <h3 class="project-division-header flex items-center"><i data-lucide="shield-check" class="w-7 h-7 mr-3"></i> Systemic Stability Division</h3>
+            
+            <div class="project-item">
+                <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                        <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Developing Financial Stability Indices (FSI) for monitoring</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                </div>
+                <div class="project-details">
+                    <p> FSI for <b>Equity</b>, <b>Debt</b>, and <b>Global</b> markets.</p>
+                    <p> Estimated using PCA components; Backtestted using 20 years data and 35 indicators </p>
+
+                </div>
+            </div>
+
+            <div class="project-item">
+                <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                        <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp; FSI _ Fixed Income for triggering a Backstop Facility</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                </div>
+                <div class="project-details">
+                    <p> Liquidity support of about Rs 33,000 crore (USD 3.7 billion) for buyinf corporate bonds at the time of market dislocation </b>.</p>
+                </div>
+            </div>
+            
+            <div class="project-item">
+                <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                        <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp;Early Warning Indicators _ dashboard</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                </div>
+                <div class="project-details">
+                    <p> Color coded dashboard for each segment of the securities market </p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="projects-data" class="project-division">
+            <h3 class="project-division-header flex items-center"><i data-lucide="database-zap" class="w-7 h-7 mr-3"></i> Data and Innovation</h3>
+            <div class="project-item">
+                <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                    <span class="project-title"><b>●&nbsp;&nbsp;&nbsp;&nbsp;Validated UPI &amp; SEBI Check</b></span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                </div>
+                <div class="project-details">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div class="bg-dark-primary p-4 rounded-xl border border-accent/20">
+                            <h4 class="text-xl font-semibold mb-4 text-white border-b border-accent/30 pb-2"><b>Validated UPI</b></h4>
+                            <p class="text-gray-400 mb-4">The exclusive <b>"@valid" handle</b> ensures payment is routed to a genuine, registered intermediary, accompanied by a <b>visual verification</b> (a <b>green thumbs-up icon</b>) on the payment app.</p>
+                            <div class="accolade-img-container h-80 sm:h-96 w-full mt-4 border border-secondary-accent/50 rounded-lg overflow-hidden">
+                                <img src="https://raw.githubusercontent.com/prasadpatankar/accolades/main/Valid_UPI_Screenshot.jpg" alt="Screenshot of payment app showing green thumbs-up icon and @valid UPI ID" class="accolade-img" onerror="this.onerror=null;this.src='https://placehold.co/600x400/00BFFF/121212?text=Validated+UPI+Screenshot+Placeholder';">
+                            </div>
+                        </div>
+
+                        <div class="bg-dark-primary p-4 rounded-xl border border-accent/20">
+                            <h4 class="text-xl font-semibold mb-4 text-white border-b border-accent/30 pb-2"><b>SEBI Check</b></h4>
+                            <p class="text-gray-400 mb-4">A <b>digital tool</b> allowing investors to cross-verify the <b>authenticity</b> of a SEBI-registered intermediary's bank account details or their <b>@valid UPI ID</b> before making any payment. Adds an <b>extra security layer</b>.</p>
+                            <div class="mt-4">
+                                <a href="https://siportal.sebi.gov.in/intermediary/sebi-check" target="_blank" class="block w-full text-center py-2 px-4 mb-4 bg-secondary-accent/20 text-secondary-accent rounded-lg hover:bg-secondary-accent/40 transition duration-200">
+                                    Click here to access the live <b>SEBI Check Tool</b>
+                                    <i data-lucide="external-link" class="w-4 h-4 inline ml-2"></i>
+                                </a>
+                            </div>
+                            <div class="accolade-img-container h-80 sm:h-96 w-full mt-4 border border-secondary-accent/50 rounded-lg overflow-hidden">
+                                <img src="https://raw.githubusercontent.com/prasadpatankar/accolades/main/SEBI_check_screenshot.png" 
+                                    alt="SEBI Check tool interface screenshot" 
+                                    class="accolade-img"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/600x400/00BFFF/121212?text=SEBI+Check+Tool+Interface+Placeholder';">
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4"><i>Note: The SEBI Check Tool is a live external website. The link is provided above. Embedding the webpage directly via an iframe is prevented by the site's security policy.</i></p>
+                </div>
+            </div>
+
+            <div class="project-item">
+                <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                    <span class="project-title"><b>●&nbsp;&nbsp;&nbsp;&nbsp;Virtual Museum</b></span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                </div>
+                <div class="project-details">
+                    <p><b>SEBI's Virtual Museum</b> is a digital knowledge repository, called as <b>"Dharohar – Milestones in the Indian Securities Market"</b>: <br> </p>
+                    <ul style="list-style-type: disc; padding-left: 20px;">
+                        <li><b>Purpose:</b> To <b>document and showcase the rich heritage and evolution</b> of the Indian securities market, which has a long-standing history of over <b>150 years</b> of organized trading.</li>
+                        <li><b>Launch:</b> Unveiled by SEBI on <b>January 26, 2025</b> (India's 76th Republic Day).</li>
+                        <li><b>Content Volume:</b> Houses over <b>3,000 assets</b>, including articles, regulations, interviews, historical newspaper clippings, <b>share certificates</b>, infographics, videos, and committee reports.</li>
+                        <li><b>Key Features (Interactive):</b> Features a dedicated website (https://www.mism.org) <a href="https://mail.mgovcloud.in/zm/reUrlCheck.do?url=https%3A%2F%2Fwww.mism.org&amp;uvd=080112b301d645509f84a209bbdea9b7090000238abd08e65c44c1bfe95c47f6f5f3a53b0b676eaf7ba78cb20c17e51558e1fad345418a822dcf3836b114818862204169691d4e74dc294efb7fb3ab76309bccf8037506be7b279b13f3b64710987ea9d452b64f2917c1fd861217d5f35a8549721d1eb037025fa692e609bb3cad9d84654582a7dbdcd8944e4a7eea3699dc2b606492acc6786a1301216bd19b3e1081078b351a4e76e26c8c64fdb36a0a11c654e9e9777d" target="_blank" class="text-accent hover:underline">Visit mism.org</a> with two innovative sections,<br> <b>a. Interactive Timeline</b> of significant events and <br><b>b. 3D Galleries</b> to offer an engaging experience.</li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="project-item">
+                <div class="project-item-header" onclick="toggleProjectDetails(this)">
+                    <span class="project-title">●&nbsp;&nbsp;&nbsp;&nbsp; Data Standardisation - using the Unified Distilled File Formats (UDiFF)</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-accent"></i>
+                </div>
+                <div class="project-details">
+                    <ul>
+                        <li>--&gt; Contributed to the implementation of SEBI’s <b>Unified Distilled File Formats (UDiFF)</b> initiative, successfully transitioning market data reporting to a harmonized, standardized system compliant with international <b>ISO standards</b>.</li>
+                        <li>--&gt; Drove a <b>90% reduction in regulatory reporting formats</b> for market members (Trading Members, Clearing Members, and Depository Participants) by consolidating over <b>200 proprietary MII report formats into just 23 standardized UDiFF files</b>, significantly improving <b>Ease of Doing Business (EoDB)</b>.</li>
+                        <li>--&gt; Enhanced market efficiency, productivity, and interoperability by creating a single, consistent data format for critical information across different segments (CM, FO, CD, COM), which also lowers the cost of entry for new <b>Fintech</b> players.</li>
+                        <li>--&gt; Standradised File_Formats and nomenclature, Field_Formats, Standard_Value_formats, Definitions, etc </li>
+                    </ul>
+                </div>
+            </div>
+
+    </div>
+
+    </div></section>
+
+
+    
+    <section id="accolades" class="py-24 bg-dark-primary border-t border-b border-accent/20">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-16 text-center text-white fade-in">Accolades &amp; Recognition</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                
+                <div class="fade-in">
+                    <h3 class="text-2xl font-semibold mb-4 text-accent flex items-center"><i data-lucide="mail-check" class="w-5 h-5 mr-2"></i> Board Member Appreciation</h3>
+                    <p class="text-gray-400 mb-6">Letter of appreciation from Shri Ananth Narayan Gopalakrishnan, Whole Time Member, SEBI, for my analytical work on the F&amp;O study and assistance in the Jane Street profit computation case. <b>Swipe or click to view quote and both pages.</b></p>
+                    
+                    <div id="carousel-wtm" class="relative w-full accolade-img-container h-[28rem] sm:h-[36rem] lg:h-[36rem]">
+                        <div id="slides-wtm" class="flex transition-transform duration-500 ease-in-out" style="width: 300%; height: 100%;">
+                            
+                            <div class="w-1/3 flex-shrink-0 h-full">
+                                <div class="quote-slide">
+                                    <blockquote class="text-xl">
+                                        <p class="quote-text">
+                                            ".....Through your dedication and methodological clarity, you have successfully translated complex analytical work into actionable insights, thereby supporting key policy and supervisory initiatives."
+                                        </p>
+                                        <cite class="quote-author">
+                                            — Mr. Ananth Narayan Gopalakrishnan, <br>Former SEBI Whole Time Member
+                                        </cite>
+                                    </div>
+                            </div>
+                            
+                            <div class="w-1/3 flex-shrink-0 h-full">
+                                <img src="https://raw.githubusercontent.com/prasadpatankar/accolades/main/Appreciation_Letter_WTM_11.jpg" alt="Appreciation Letter Page 1 from Whole Time Member" class="accolade-img cursor-pointer" onclick="openLightbox(this)" onerror="this.onerror=null;this.src='https://placehold.co/600x800/808080/FFFFFF?text=WTM+Letter+Page+1+Error';">
+                            </div>
+
+                            <div class="w-1/3 flex-shrink-0 h-full">
+                                <img src="https://raw.githubusercontent.com/prasadpatankar/accolades/main/Appreciation_Letter_WTM_12.jpg" alt="Appreciation Letter Page 2 from Whole Time Member" class="accolade-img cursor-pointer" onclick="openLightbox(this)" onerror="this.onerror=null;this.src='https://placehold.co/600x800/808080/FFFFFF?text=WTM+Letter+Page+2+Error';">
+                            </div>
+                        </div>
+
+                        <button onclick="prevSlide('wtm')" class="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-black/50 p-2 rounded-full hover:bg-black/80 transition z-10 focus:outline-none">
+                            <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                        </button>
+                        <button onclick="nextSlide('wtm')" class="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-black/50 p-2 rounded-full hover:bg-black/80 transition z-10 focus:outline-none">
+                            <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                        </button>
+
+                        <div id="indicators-wtm" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                            <span class="w-3 h-3 bg-white rounded-full opacity-50 cursor-pointer" onclick="currentSlide('wtm', 0)"></span>
+                            <span class="w-3 h-3 bg-white rounded-full opacity-50 cursor-pointer" onclick="currentSlide('wtm', 1)"></span>
+                            <span class="w-3 h-3 bg-white rounded-full opacity-50 cursor-pointer" onclick="currentSlide('wtm', 2)"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-in" style="transition-delay: 0.1s;">
+                    <h3 class="text-2xl font-semibold mb-4 text-accent flex items-center"><i data-lucide="smile" class="w-5 h-5 mr-2"></i> Chairperson's Recognition</h3>
+                    <p class="text-gray-400 mb-6">Received the 'Smiley Ball' token of appreciation from former Chairperson Ms. Madhabi Puri Buch for the high-impact work on developing the Financial Stability Indices (FSI).</p>
+                    
+                    <div class="accolade-img-container h-[28rem] sm:h-[36rem] lg:h-[36rem]">
+                        <img id="img-chairperson" src="https://raw.githubusercontent.com/prasadpatankar/accolades/main/Appreciation%20from%20Chairperson.jpg" alt="Smiley Ball with handwritten note 'Fabulous work' from Chairperson" class="accolade-img cursor-pointer" onclick="openLightbox(this)" onerror="this.onerror=null;this.src='https://placehold.co/600x800/14532D/FFFFFF?text=Chairperson+Recognition+Error';">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="Applications" class="py-24 bg-dark-primary border-t border-b border-accent/20">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-16 text-center text-white fade-in">Analytical Projects &amp; Applications</h2>
+            
+            <div class="grid grid-cols-1 gap-12 items-start">
+                
+                <div class="fade-in">
+                    <h3 class="text-2xl font-semibold mb-6 text-accent flex items-center"><i data-lucide="bar-chart-3" class="w-5 h-5 mr-2"></i> Real-time Market Analysis Dashboards</h3>
+                    
+                    <p class="text-gray-400 mb-8">
+                        These projects showcase the development of high-impact analytical dashboards using <b>R Shiny</b> and <b>Python Streamlit</b>. They integrate real-time market data and analytical models to visualize key investor behavior findings and regulatory impact, supporting data-driven decision-making within the organization.
+                    </p>
+
+                    <div class="flex flex-col gap-10">
+                        
+                        <div id="app-project-1" class="bg-dark-secondary p-4 rounded-xl shadow-lg border border-accent/30">
+                            <h4 class="text-xl font-semibold mb-4 text-white">Project 1: Interactive SEBI Handbook of Statistics (R, SQL, Plotly, Shinyapps)</h4>
+                            <p class="text-gray-400 mb-4">• Simple navigation and easy UI to access securities market data <br>	• Custom data-fetching, interactive dashboard and visualization tool for market statistics. <a href="https://mail.mgovcloud.in/zm/reUrlCheck.do?url=https%3A%2F%2Fprasadp.shinyapps.io%2Fsebi%2F&amp;uvd=080112b80163914e2169c7a018daa3f84100002e861f342af7c3e1c9f930f63a5a7c9d917c555dc8c7a742515cad0589a36edb782e1de1bda68597a9f782b9873d1925b7c0d4861a9c336d5d4ac2bfca7b9de66a17c5c9ec6096f6c0e87701ec21b0f552d725117c068e1a1fc191a94fbba6a1639e428b09173bdfe17a75cb25da5c459fa6155c041a1b17c7b6844ecc55fc3f6aed4846e91cfe2ef9d272971b809699c30b114be38459fc9fd5b4fbe808dcb127a5d8043aa3db61c443" target="_blank" class="text-accent hover:underline">View App in New Tab</a></p>
+                            <div style="aspect-ratio: 16/9; min-height: 600px; max-height: 80vh;">
+                                <iframe src="https://prasadp.shinyapps.io/sebi/" width="100%" height="100%" frameborder="0" class="rounded-lg shadow-2xl" title="SEBI IPO Analysis Dashboard (Shiny)">
+                                </iframe>
+                            </div>
+                        </div>
+
+                        <div id="app-project-2" class="bg-dark-secondary p-4 rounded-xl shadow-lg border border-accent/30">
+                            <h4 class="text-xl font-semibold mb-4 text-white">Project 2: SEBI Securities Market Dashboard and Database (using Python, SQL, Plotly)</h4>
+                            <p class="text-gray-400 mb-4">•	Interactive dashboard of key market statsitics for the management <br> • Creation and maintenance of database on Indian securities market  <br> • Auto updation of database, iusing excel or CSV file upload <a href="https://mail.mgovcloud.in/zm/reUrlCheck.do?url=https%3A%2F%2Fsebiapp.streamlit.app%2F&amp;uvd=080112b801c29f075dc7fa935ac9b9e4f100003143800fcd769599e6f43c9fdeffb5c6db94ffe1af75622af34b70e92adbeb2835188c2f06ddd76ff3ef4d7546058192141308801ba8056bddd47e94569bbb78c5d56d8d9fb05974aa85c72015ae1b3ed032d5ffb3aa61bbcdf585ba32e6dcbfad35d808780c8ae2a65c426cd23619db25b9d2688f4606ffe4ca6410448e0a513d40ee816638057bfd304c95d6d68fa693342f79d78da44d9e5de0f0122915b89cb3e75d7aa25c6f9378" target="_blank" class="text-accent hover:underline">View App in New Tab</a></p>
+                            <div style="aspect-ratio: 16/9; min-height: 600px; max-height: 80vh;">
+                                <iframe src="https://sebiapp.streamlit.app/?embed=true" width="100%" height="100%" frameborder="0" class="rounded-lg shadow-2xl" title="SEBI Derivatives P&amp;L Analysis (Streamlit)">
+                                </iframe>
+                            </div>
+                        </div>
+
+                        <div id="app-project-3" class="bg-dark-secondary p-4 rounded-xl shadow-lg border border-accent/30">
+                            <h4 class="text-xl font-semibold mb-4 text-white">Project 3: Valid UPI Generation Tool - Portal for Intermediaries (HTML/JS)</h4>
+                            <p class="text-gray-400 mb-4">A lightweight, client-side HTML and JavaScript tool to help users correctly generate UPI (Unified Payments Interface) Request links, ensuring proper formatting of the handle, amount, and note fields for seamless payment initiation. <a href="https://mail.mgovcloud.in/zm/reUrlCheck.do?url=https%3A%2F%2Fprasadpatankar.github.io%2Fvalid_upi%2Fupi_handle_request.html&amp;uvd=080112bc012cd800a7d40f6c33b2896eb90000d09d31b8e0cf361ded39a7786cd17a5e5c1ce7cc8d298e4fbf4c2b17cbdc614bf9d1b16209a16fc9ba475a460e00a06620f67c58a0970452c5021dac3729a674e0ae032ed8f177b245bbaab35aaf6cb9bfc72e58a6a72971f678afe4248d86c12b3eefab75a27f0971f9d9e0811240268d53af876b7a68aa9a8e891395bf178dc1834bac246cb0568b106265b4f56c8d599ceb2674d4bee6fdde2b88e713d53e80e874c8744fe8e4ef585c209e61" target="_blank" class="text-accent hover:underline">View Tool on GitHub Raw</a></p>
+                            <div style="aspect-ratio: 16/9; min-height: 600px; max-height: 80vh;">
+                                <iframe src="https://prasadpatankar.github.io/valid_upi/upi_handle_request.html" width="100%" height="100%" frameborder="0" style="background-color: white;" sandbox="allow-scripts allow-same-origin" class="rounded-lg shadow-2xl" title="UPI Handle Generation Tool">
+                                </iframe>
+                            </div>
+                        </div>
+
+                        <div id="app-project-4" class="bg-dark-secondary p-4 rounded-xl shadow-lg border border-accent/30">
+                            <h4 class="text-xl font-semibold mb-4 text-white">Project 4: Valid UPI Verification -  Portal for Banks  (HTML/JS)</h4>
+                            <p class="text-gray-400 mb-4"> Application for Banks to view UPI requests, and decide whether to approve or reject. <a href="https://mail.mgovcloud.in/zm/reUrlCheck.do?url=https%3A%2F%2Fprasadpatankar.github.io%2Fvalid_upi%2Fupi-verification-portal.html&amp;uvd=080112bc01fa18e509fe7c5968b6ff09ec0000e41e3c600436bef39e712454524d86a8b885d4e1e1ceaa126b2e58682858c9591ec587bf56873eb6ce863f0329d55bc5b72c2fedb1090db79a6e226d359d21e63106dafffd6875c225921c920b160379b0dc90027a478a256ef3bfdbb1ae4a5583bfa5667defbef0b3c45895656f236bc2d2066e13d9e328f483a793bf2ff569486965c65140f4a3fe1e4986065048ab225267916da114f984f6c6c99f30d3b9855548ed6b981b9249071fc5bc67">View Tool on GitHub Raw</a></p>
+                            <div style="aspect-ratio: 16/9; min-height: 600px; max-height: 80vh;">
+                                <iframe src="https://prasadpatankar.github.io/valid_upi/upi-verification-portal.html" width="100%" height="100%" frameborder="0" style="background-color: white;" sandbox="allow-scripts allow-same-origin" class="rounded-lg shadow-2xl" title="UPI Handle Generation Tool">
+                                </iframe>
+                            </div>
+                        </div>
+
+
+                        <div id="app-project-5" class="bg-dark-secondary p-4 rounded-xl shadow-lg border border-accent/30">
+                            <h4 class="text-xl font-semibold mb-4 text-white">Project 5: Talk2Data WebApp (using Python, SQL and Gemini AI)</h4>
+                            <p class="text-gray-400 mb-4">• Preparartion of dashboard and structured database using the list of 1000s of SEBI Orders <br>• NLP-based custom query on SEBI orders database (Trained using Gemini AI, Prompt Engineering technique). <a href="https://mail.mgovcloud.in/zm/reUrlCheck.do?url=https%3A%2F%2Ftalk2data-sebi.streamlit.app%2F&amp;uvd=080112b8017d68d5d432b082d441df9bd300001b0a88acc4592a41b552d3a0eae3a98074565a1428a96bacf1a28ddf8061c2a86e9cc2c85b82a7212caa77026cfb7dd286300f1b19d360d2c66b96703b6693910bba4ee6ffa0d58ed28f21f2f07477015850a0930e8c7bbb6132692febf6937438c224a6828c1b7bd86dd055e47fffa4d7d5f8935d79f4908bcf2caae9fb60613464af0017ce17fc752c0e825df5bd34f1780c5a4f94fd1b44230195087e5a2806645edc420b132df750" target="_blank" class="text-accent hover:underline">View App in New Tab</a></p>
+                            <div style="aspect-ratio: 16/9; min-height: 600px; max-height: 80vh;">
+                                <iframe src="https://talk2data-sebi.streamlit.app/?embed=true" width="100%" height="100%" frameborder="0" class="rounded-lg shadow-2xl" title="Talk2Data WebApp (Streamlit, Gemini AI)">
+                                </iframe>
+                            </div>
+                        </div>
+                        
+                        <div id="app-visualisation-demo" class="bg-dark-secondary p-4 rounded-xl shadow-lg border border-accent/30">
+                            <h4 class="text-xl font-semibold mb-4 text-white">Visualisation Demo</h4>
+                            <p class="text-gray-400 mb-4">A carousel showcasing various data visualisations and analytical output images.</p>
+                            
+                            <!-- FIX: Added overflow-hidden to the viewport container -->
+                            <div id="carousel-visualisation" class="relative w-full visualisation-img-container h-[20rem] sm:h-[28rem] lg:h-[30rem] overflow-hidden">
+                                <!-- FIX: Corrected width to 700% (7 slides * 100% viewport width) -->
+                                <div id="slides-visualisation" class="flex transition-transform duration-500 ease-in-out" style="width: 700%; height: 100%;">
+                                    
+                                    <!-- FIX: Corrected individual slide width to 1/7th of the container width (14.2857%) -->
+                                    <div class="flex-shrink-0 h-full accolade-slide" style="width: 14.2857%;">
+                                        <img src="https://github.com/prasadpatankar/Visualisations/blob/main/download%20(17).png?raw=true" 
+                                            alt="Data Visualisation Demo 1" 
+                                            class="accolade-img cursor-pointer" 
+                                            onclick="openLightbox(this)" 
+                                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/00FFBB/121212?text=Visualisation+1+Placeholder';">
+                                    </div>
+                    
+                                    <div class="flex-shrink-0 h-full accolade-slide" style="width: 14.2857%;">
+                                        <img src="https://github.com/prasadpatankar/Visualisations/blob/main/download%20(18).png?raw=true" 
+                                            alt="Data Visualisation Demo 2" 
+                                            class="accolade-img cursor-pointer" 
+                                            onclick="openLightbox(this)" 
+                                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/00FFBB/121212?text=Visualisation+2+Placeholder';">
+                                    </div>
+                    
+                                    <div class="flex-shrink-0 h-full accolade-slide" style="width: 14.2857%;">
+                                        <img src="https://github.com/prasadpatankar/Visualisations/blob/main/download%20(19).png?raw=true" 
+                                            alt="Data Visualisation Demo 3" 
+                                            class="accolade-img cursor-pointer" 
+                                            onclick="openLightbox(this)" 
+                                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/00FFBB/121212?text=Visualisation+3+Placeholder';">
+                                    </div>
+                                    
+                                    <div class="flex-shrink-0 h-full accolade-slide" style="width: 14.2857%;">
+                                        <img src="https://github.com/prasadpatankar/Visualisations/blob/main/download%20(36).png?raw=true" 
+                                            alt="Data Visualisation Demo 4" 
+                                            class="accolade-img cursor-pointer" 
+                                            onclick="openLightbox(this)" 
+                                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/00FFBB/121212?text=Visualisation+4+Placeholder';">
+                                    </div>
+                                    
+                                    <div class="flex-shrink-0 h-full accolade-slide" style="width: 14.2857%;">
+                                        <img src="https://github.com/prasadpatankar/Visualisations/blob/main/download%20(37).png?raw=true" 
+                                            alt="Data Visualisation Demo 5" 
+                                            class="accolade-img cursor-pointer" 
+                                            onclick="openLightbox(this)" 
+                                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/00FFBB/121212?text=Visualisation+5+Placeholder';">
+                                    </div>
+
+                                    <div class="flex-shrink-0 h-full accolade-slide" style="width: 14.2857%;">
+                                        <img src="https://github.com/prasadpatankar/Visualisations/blob/main/download%20(38).png?raw=true" 
+                                            alt="Data Visualisation Demo 6" 
+                                            class="accolade-img cursor-pointer" 
+                                            onclick="openLightbox(this)" 
+                                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/00FFBB/121212?text=Visualisation+6+Placeholder';">
+                                    </div>
+
+                                    <div class="flex-shrink-0 h-full accolade-slide" style="width: 14.2857%;">
+                                        <img src="https://github.com/prasadpatankar/Visualisations/blob/main/download%20(39).png?raw=true" 
+                                            alt="Data Visualisation Demo 7" 
+                                            class="accolade-img cursor-pointer" 
+                                            onclick="openLightbox(this)" 
+                                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/00FFBB/121212?text=Visualisation+7+Placeholder';">
+                                    </div>
+                                </div>
+                    
+                                <button onclick="prevSlide('visualisation')" class="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-black/50 p-2 rounded-full hover:bg-black/80 transition z-10 focus:outline-none">
+                                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                                </button>
+                                <button onclick="nextSlide('visualisation')" class="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-black/50 p-2 rounded-full hover:bg-black/80 transition z-10 focus:outline-none">
+                                    <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                                </button>
+                    
+                                <!-- FIX: Corrected indicators to handle all 7 slides -->
+                                <div id="indicators-visualisation" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                                    <span class="w-3 h-3 bg-white rounded-full opacity-50 cursor-pointer" onclick="currentSlide('visualisation', 0)"></span>
+                                    <span class="w-3 h-3 bg-white rounded-full opacity-50 cursor-pointer" onclick="currentSlide('visualisation', 1)"></span>
+                                    <span class="w-3 h-3 bg-white rounded-full opacity-50 cursor-pointer" onclick="currentSlide('visualisation', 2)"></span>
+                                    <span class="w-3 h-3 bg-white rounded-full opacity-50 cursor-pointer" onclick="currentSlide('visualisation', 3)"></span>
+                                    <span class="w-3 h-3 bg-white rounded-full opacity-50 cursor-pointer" onclick="currentSlide('visualisation', 4)"></span>
+                                    <span class="w-3 h-3 bg-white rounded-full opacity-50 cursor-pointer" onclick="currentSlide('visualisation', 5)"></span>
+                                    <span class="w-3 h-3 bg-white rounded-full opacity-50 cursor-pointer" onclick="currentSlide('visualisation', 6)"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="contact" class="py-16 bg-dark-secondary border-t border-b border-accent/20">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-8 text-center text-white fade-in">Get In Touch</h2>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-12 text-lg text-gray-300">
+                <div class="flex items-center fade-in" style="transition-delay: 0.1s;">
+                    <i data-lucide="map-pin" class="w-6 h-6 mr-3 text-accent"></i> 
+                    <span>Mumbai, Maharashtra, India</span>
+                </div>
+                <div class="flex items-center fade-in" style="transition-delay: 0.2s;">
+                    <i data-lucide="mail" class="w-6 h-6 mr-3 text-accent"></i> 
+                    <a href="mailto:prasadp@sebi.gov.in" class="hover:text-accent">prasadp@sebi.gov.in</a>
+                </div>
+                <div class="flex items-center fade-in" style="transition-delay: 0.3s;">
+                    <i data-lucide="phone" class="w-6 h-6 mr-3 text-accent"></i> 
+                    <span>+91 98330 94490</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <footer class="py-10 bg-dark-primary text-center text-gray-500 text-sm border-t border-dark-secondary">
+        <div class="max-w-7xl mx-auto px-6">
+            <p>© 2025 Prasad Patankar. Data-Driven Insights for Financial Regulation.</p>
+        </div>
+    </footer>
+    
+    <div id="lightbox" class="fixed inset-0 z-[100] bg-black/90 hidden items-center justify-center p-4 overflow-y-auto" onclick="handleLightboxClick(event)">
+        <div class="relative max-w-7xl max-h-full mx-auto" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white p-2 rounded-full bg-black/50 hover:bg-black/80 transition z-20">
+                <i data-lucide="x" class="w-8 h-8 pointer-events-none"></i> 
+            </button>
+            <img id="lightbox-image" src="" alt="Enlarged Accolade Image" class="w-full h-auto object-contain rounded-lg shadow-2xl max-w-[95vw] md:max-w-full">
+        </div>
+    </div>
+
+
+
+
+    <script>
+        // --- NEW PROJECT ACCORDION LOGIC ---
+        function toggleProjectDetails(headerElement) {
+            const projectItem = headerElement.closest('.project-item');
+            const details = projectItem.querySelector('.project-details');
+            const icon = headerElement.querySelector('[data-lucide="chevron-down"]');
+            
+            // Check if it's already active
+            const isActive = details.classList.contains('active');
+
+            // Close all open projects first (optional: for single-open accordion)
+            document.querySelectorAll('.project-details.active').forEach(openDetails => {
+                if (openDetails !== details) {
+                    openDetails.classList.remove('active');
+                    const openIcon = openDetails.closest('.project-item').querySelector('.project-item-header').querySelector('[data-lucide="chevron-down"]');
+                    openIcon.closest('.project-item-header').classList.remove('expanded');
+                }
+            });
+
+            // Toggle the current project
+            details.classList.toggle('active');
+            headerElement.classList.toggle('expanded', !isActive);
+        }
+        // --- END NEW PROJECT ACCORDION LOGIC ---
+
+
+        // --- Carousel Logic (UPDATED to handle 'visualisation' carousel) ---
+        let wtmSlideIndex = 0; // Initialize at 0 (the new quote slide)
+        let visualisationSlideIndex = 0; // NEW: Initialize index for the new carousel
+
+        function getCarouselData(carouselName) {
+            if (carouselName === 'wtm') {
+                return {
+                    slides: document.querySelectorAll('#slides-wtm > div'),
+                    indicators: document.getElementById('indicators-wtm').children,
+                    index: wtmSlideIndex,
+                    updateIndex: (newIndex) => { wtmSlideIndex = newIndex; }
+                };
+            } else if (carouselName === 'visualisation') {
+                return {
+                    slides: document.querySelectorAll('#slides-visualisation > div'),
+                    indicators: document.getElementById('indicators-visualisation').children,
+                    index: visualisationSlideIndex,
+                    updateIndex: (newIndex) => { visualisationSlideIndex = newIndex; }
+                };
+            }
+            return null;
+        }
+
+        function showSlides(carouselName) {
+            const data = getCarouselData(carouselName);
+            if (!data) return;
+
+            let { slides, indicators, index, updateIndex } = data;
+            
+            if (slides.length === 0) return;
+
+            // Loop back to start/end if boundaries are crossed
+            if (index >= slides.length) {
+                index = 0;
+            }
+            if (index < 0) {
+                index = slides.length - 1;
+            }
+
+            // Update global index reference
+            updateIndex(index);
+
+            // Calculate the required translation percentage 
+            const transformValue = `translateX(-${index * 100 / slides.length}%)`;
+            
+            // Move the slides container
+            document.getElementById(`slides-${carouselName}`).style.transform = transformValue;
+            
+            // Set the width of the slides container to accommodate all slides
+            document.getElementById(`slides-${carouselName}`).style.width = `${slides.length * 100}%`;
+
+            // Update indicators
+            for (let i = 0; i < indicators.length; i++) {
+                indicators[i].classList.remove('opacity-100');
+                indicators[i].classList.add('opacity-50');
+            }
+            if(indicators[index]) {
+                indicators[index].classList.remove('opacity-50');
+                indicators[index].classList.add('opacity-100');
+            }
+        }
+
+        function nextSlide(carouselName) {
+            if (carouselName === 'wtm') {
+                wtmSlideIndex++;
+            } else if (carouselName === 'visualisation') {
+                visualisationSlideIndex++;
+            }
+            showSlides(carouselName);
+        }
+
+        function prevSlide(carouselName) {
+            if (carouselName === 'wtm') {
+                wtmSlideIndex--;
+            } else if (carouselName === 'visualisation') {
+                visualisationSlideIndex--;
+            }
+            showSlides(carouselName);
+        }
+
+        function currentSlide(carouselName, n) {
+            if (carouselName === 'wtm') {
+                wtmSlideIndex = n;
+            } else if (carouselName === 'visualisation') {
+                visualisationSlideIndex = n;
+            }
+            showSlides(carouselName);
+        }
+
+        // --- Lightbox/Modal Logic (Fixed for closing and scrolling) ---
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+
+        function openLightbox(imgElement) {
+            // Only open lightbox for actual images (not the quote slide)
+            if (imgElement.tagName === 'IMG') { 
+                lightboxImage.src = imgElement.src;
+                lightboxImage.alt = imgElement.alt;
+                lightbox.classList.remove('hidden');
+                lightbox.classList.add('flex');
+                // Prevent body scroll when lightbox is open
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Central closing function (called by button click and background click handler)
+        function closeLightbox() {
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Handles click on the dark background
+        function handleLightboxClick(event) {
+            if (event.target === lightbox) {
+                closeLightbox();
+            }
+        }
+
+        // --- Intersection Observer for Fade-In Effect ---
+        const fadeInObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            fadeInObserver.observe(element);
+        });
+
+        // Initial load state
+        window.onload = () => {
+            // Render Lucide icons once everything is loaded
+            lucide.createIcons();
+            // Initialize the carousels
+            showSlides('wtm'); 
+            showSlides('visualisation'); // NEW: Initialize the new carousel
+        };
+    </script>
+</body>
+</html>
